@@ -1,0 +1,17 @@
+# Local environment variables (contains secrets/API keys)
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*/__pycache__/
+assistant/__pycache__/
+
+# Local AI/RAG cache
+.cache/
+
+# Runtime generated databases & files
+orders_db.json
+forecasting/results.csv
+forecasting/summary.csv
+eval/results.json

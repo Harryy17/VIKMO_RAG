@@ -1,0 +1,229 @@
+[
+  {
+    "id": "T01",
+    "category": "happy_path",
+    "description": "Find brake pads for Bajaj Pulsar 150",
+    "turns": [
+      {"role": "user", "content": "Do you have brake pads for a Bajaj Pulsar 150?"}
+    ],
+    "expected": {
+      "intent": "product_search",
+      "tool_called": null,
+      "must_contain": ["Pulsar 150", "brake"],
+      "must_not_contain": ["sorry, I can't", "out of scope"],
+      "retrieval_grounded": true
+    }
+  },
+  {
+    "id": "T02",
+    "category": "happy_path",
+    "description": "Check stock for a known SKU",
+    "turns": [
+      {"role": "user", "content": "What is the stock for SKU BRK-1042?"}
+    ],
+    "expected": {
+      "intent": "check_stock",
+      "tool_called": "check_stock",
+      "must_contain": ["stock", "BRK-1042"],
+      "must_not_contain": ["I don't know"],
+      "retrieval_grounded": true
+    }
+  },
+  {
+    "id": "T03",
+    "category": "happy_path",
+    "description": "Place a simple order",
+    "turns": [
+      {"role": "user", "content": "Place an order for 2 units of BRK-1042 for ABC Motors."}
+    ],
+    "expected": {
+      "intent": "create_order",
+      "tool_called": "create_order",
+      "must_contain": ["ORD-", "confirmed", "ABC Motors"],
+      "must_not_contain": ["error", "failed"],
+      "retrieval_grounded": true
+    }
+  },
+  {
+    "id": "T04",
+    "category": "happy_path",
+    "description": "Find parts by vehicle",
+    "turns": [
+      {"role": "user", "content": "What parts do you have for KTM Duke 390?"}
+    ],
+    "expected": {
+      "intent": "find_parts_by_vehicle",
+      "tool_called": "find_parts_by_vehicle",
+      "must_contain": ["Duke 390"],
+      "must_not_contain": [],
+      "retrieval_grounded": true
+    }
+  },
+  {
+    "id": "T05",
+    "category": "happy_path",
+    "description": "Cheapest product in a category",
+    "turns": [
+      {"role": "user", "content": "What is the cheapest chain lube you stock?"}
+    ],
+    "expected": {
+      "intent": "product_search",
+      "tool_called": null,
+      "must_contain": ["₹", "lube"],
+      "must_not_contain": ["I don't know", "cannot"],
+      "retrieval_grounded": true
+    }
+  },
+  {
+    "id": "T06",
+    "category": "clarification",
+    "description": "Ambiguous request — no vehicle specified",
+    "turns": [
+      {"role": "user", "content": "I need brake pads."}
+    ],
+    "expected": {
+      "intent": "clarify_vehicle",
+      "tool_called": null,
+      "must_contain_any": ["which bike", "which vehicle", "make and model", "what vehicle", "which motorcycle"],
+      "must_not_contain": [],
+      "retrieval_grounded": false
+    }
+  },
+  {
+    "id": "T07",
+    "category": "clarification",
+    "description": "Ambiguous tyre request",
+    "turns": [
+      {"role": "user", "content": "I need tyres."}
+    ],
+    "expected": {
+      "intent": "clarify_vehicle",
+      "tool_called": null,
+      "must_contain_any": ["which bike", "which vehicle", "make and model", "what vehicle", "size", "type"],
+      "must_not_contain": [],
+      "retrieval_grounded": false
+    }
+  },
+  {
+    "id": "T08",
+    "category": "multi_turn",
+    "description": "Multi-turn: ambiguous then clarified",
+    "turns": [
+      {"role": "user", "content": "I need an air filter."},
+      {"role": "user", "content": "It's for a Honda Activa 6G."}
+    ],
+    "expected": {
+      "intent": "product_search",
+      "tool_called": null,
+      "must_contain": ["Activa", "filter"],
+      "must_not_contain": [],
+      "retrieval_grounded": true
+    }
+  },
+  {
+    "id": "T09",
+    "category": "out_of_scope",
+    "description": "Off-topic: weather",
+    "turns": [
+      {"role": "user", "content": "What's the weather today?"}
+    ],
+    "expected": {
+      "intent": "off_topic_reject",
+      "tool_called": null,
+      "must_contain_any": ["auto parts", "specialise", "help with", "not able"],
+      "must_not_contain": ["temperature", "sunny", "cloudy"],
+      "retrieval_grounded": false
+    }
+  },
+  {
+    "id": "T10",
+    "category": "out_of_scope",
+    "description": "Off-topic: cricket score",
+    "turns": [
+      {"role": "user", "content": "Who won the cricket match yesterday?"}
+    ],
+    "expected": {
+      "intent": "off_topic_reject",
+      "tool_called": null,
+      "must_contain_any": ["auto parts", "not able", "specialise", "outside"],
+      "must_not_contain": ["India", "runs", "wicket"],
+      "retrieval_grounded": false
+    }
+  },
+  {
+    "id": "T11",
+    "category": "tricky",
+    "description": "Order with invalid SKU",
+    "turns": [
+      {"role": "user", "content": "Order 5 units of FAKE-9999 for XYZ Dealers."}
+    ],
+    "expected": {
+      "intent": "create_order_fail",
+      "tool_called": "create_order",
+      "must_contain_any": ["not found", "invalid", "FAKE-9999", "don't have"],
+      "must_not_contain": ["ORD-", "confirmed"],
+      "retrieval_grounded": false
+    }
+  },
+  {
+    "id": "T12",
+    "category": "tricky",
+    "description": "Price inquiry — must come from data",
+    "turns": [
+      {"role": "user", "content": "What is the price of a spark plug for Honda CB300R?"}
+    ],
+    "expected": {
+      "intent": "product_search",
+      "tool_called": null,
+      "must_contain": ["₹"],
+      "must_not_contain": ["I don't know the price", "not sure"],
+      "retrieval_grounded": true
+    }
+  },
+  {
+    "id": "T13",
+    "category": "tricky",
+    "description": "Stock check — out of stock scenario",
+    "turns": [
+      {"role": "user", "content": "Check stock for FIL-1001"}
+    ],
+    "expected": {
+      "intent": "check_stock",
+      "tool_called": "check_stock",
+      "must_contain": ["FIL-1001"],
+      "must_not_contain": [],
+      "retrieval_grounded": true
+    }
+  },
+  {
+    "id": "T14",
+    "category": "happy_path",
+    "description": "List all categories or help overview",
+    "turns": [
+      {"role": "user", "content": "What kind of auto parts do you carry?"}
+    ],
+    "expected": {
+      "intent": "catalogue_overview",
+      "tool_called": null,
+      "must_contain_any": ["brake", "filter", "engine", "tyre", "chain", "category"],
+      "must_not_contain": [],
+      "retrieval_grounded": false
+    }
+  },
+  {
+    "id": "T15",
+    "category": "multi_turn",
+    "description": "Multi-turn: check stock then order",
+    "turns": [
+      {"role": "user", "content": "Check stock for BRK-1001"},
+      {"role": "user", "content": "Great, order 3 of those for Sharma Auto Parts."}
+    ],
+    "expected": {
+      "intent": "create_order",
+      "tool_called": "create_order",
+      "must_contain": ["ORD-", "Sharma"],
+      "must_not_contain": ["error"],
+      "retrieval_grounded": true
+    }
+  }
+]
